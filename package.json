@@ -1,0 +1,14 @@
+{
+  "name": "agent-saas-boilerplate",
+  "version": "1.0.0",
+  "description": "Production-Ready SaaS Boilerplate for Multi-Agent AI Applications (DAG Engine, FastAPI + SSE, Stripe/Razorpay Webhooks)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npx serve -s frontend -l 3000",
+    "test:mock-webhooks": "node scripts/trigger_mock_webhooks.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

@@ -1,0 +1,25 @@
+working:
+  - claim: "FastAPI gateway launches and serves public API endpoints"
+    confidence: 100
+    verify: "curl -s http://localhost:8000/api/health"
+    expected_output: '{"status":"healthy","service":"agent-saas-boilerplate-backend"}'
+
+  - claim: "DAG Scheduler processes multi-agent node graphs concurrently and sequentially without framework overhead"
+    confidence: 95
+    verify: "python backend/dag_engine.py"
+    expected_output: "Node: Reviewer is RUNNING"
+
+  - claim: "Server-Sent Events broadcaster streams live execution status updates over text/event-stream persistent links"
+    confidence: 90
+    verify: "curl -s -N http://localhost:8000/api/stream"
+    expected_output: "event: step_status"
+
+  - claim: "Stripe and Razorpay webhook handlers protect endpoints by rejecting payloads with mismatched cryptographical signatures"
+    confidence: 98
+    verify: "curl -s -X POST -H 'X-Razorpay-Signature: fake_signature' -d '{\"event\":\"payment.captured\"}' http://localhost:8000/api/billing/webhook/razorpay"
+    expected_output: "Signature mismatch"
+
+  - claim: "Circuit Breaker trips to OPEN and falls back immediately if consecutive downstream API call exceptions occur"
+    confidence: 95
+    verify: "python backend/circuit_breaker.py"
+    expected_output: "Circuit breaker 'TestAPI' is OPEN"

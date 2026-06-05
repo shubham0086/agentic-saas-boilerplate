@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic SaaS Boilerplate — Pipeline Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface-2:    #1c2128;
+      --border:       #30363d;
+      --border-muted: #21262d;
+      --text:         #e6edf3;
+      --text-muted:   #8b949e;
+      --accent:       #58a6ff;
+      --success:      #3fb950;
+      --warning:      #d29922;
+      --error:        #f85149;
+      --idle:         #484f58;
+      --terminal-bg:  #010409;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-muted);
+      padding-bottom: 1rem;
+    }
+
+    header h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.25rem;
+    }
+
+    /* DAG */
+    .dag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .dag-row {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .dag-connector {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+    }
+
+    .node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.5rem 1.25rem;
+      border-radius: 4px;
+      border: 1px solid var(--idle);
+      color: var(--idle);
+      min-width: 130px;
+      text-align: center;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+    }
+
+    .node.running {
+      border-color: var(--warning);
+      color: var(--warning);
+      background: rgba(210, 153, 34, 0.06);
+    }
+
+    .node.success {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(63, 185, 80, 0.06);
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .node.running { animation: blink 1.4s ease-in-out infinite; }
+
+    /* Terminal */
+    .terminal {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--terminal-bg);
+      border: 1px solid var(--border-muted);
+      border-radius: 4px;
+      padding: 1rem;
+      height: 220px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .log { margin-bottom: 3px; line-height: 1.6; }
+    .log .ts { color: var(--idle); margin-right: 0.5rem; }
+    .log.info    .msg { color: var(--text-muted); }
+    .log.event   .msg { color: var(--accent); }
+    .log.running .msg { color: var(--warning); }
+    .log.success .msg { color: var(--success); }
+    .log.error   .msg { color: var(--error); }
+
+    /* Forms */
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 0.75rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 0.75rem;
+    }
+
+    input[type="text"]:focus { border-color: var(--accent); }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+    .btn:active { opacity: 0.7; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      width: 100%;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+
+    .btn-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+
+    /* Metrics */
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .metric:last-child { border-bottom: none; }
+    .metric-label { color: var(--text-muted); font-size: 0.8rem; }
+    .metric-value { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 500; }
+
+    /* Badge */
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.2);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--idle);
+      margin-right: 0.4rem;
+    }
+
+    .status-dot.running { background: var(--warning); }
+    .status-dot.success { background: var(--success); }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Agentic SaaS Boilerplate</h1>
+    <span>Pipeline Dashboard &mdash; Sandbox Mode</span>
+  </header>
+
+  <div class="layout">
+
+    <div class="left-col">
+
+      <!-- DAG visualizer -->
+      <div class="card">
+        <div class="card-header-row">
+          <span class="card-header">Execution Graph (DAG)</span>
+          <span id="pipeline-status" class="badge">IDLE</span>
+        </div>
+        <div class="dag">
+          <div class="dag-row">
+            <div id="node-Planner" class="node">Planner</div>
+          </div>
+          <div class="dag-connector"></div>
+          <div class="dag-row">
+            <div id="node-Copywriter" class="node">Copywriter</div>
+            <div id="node-ImageGenerator" class="node">ImageGenerator</div>
+          </div>
+          <div class="dag-connector"></div>
+          <div class="dag-row">
+            <div id="node-Verifier" class="node">Verifier</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SSE terminal -->
+      <div class="card">
+        <div class="card-header">SSE Event Stream</div>
+        <div id="terminal" class="terminal">
+          <div class="log info"><span class="ts">&mdash;</span><span class="msg">Waiting for pipeline execution...</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="right-col">
+
+      <!-- Trigger -->
+      <div class="card">
+        <div class="card-header">Run Pipeline</div>
+        <label for="task-input">Campaign Goal</label>
+        <input type="text" id="task-input" value="Build Ayurvedic Wellness Campaign in Jaipur">
+        <button id="run-btn" class="btn btn-primary">Execute Workflow</button>
+      </div>
+
+      <!-- Telemetry -->
+      <div class="card">
+        <div class="card-header">Session Telemetry</div>
+        <div class="metric">
+          <span class="metric-label">LLM Cost</span>
+          <span id="metric-cost" class="metric-value">$0.0000</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Tokens In</span>
+          <span id="metric-tokens-in" class="metric-value">0</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Tokens Out</span>
+          <span id="metric-tokens-out" class="metric-value">0</span>
+        </div>
+      </div>
+
+      <!-- Billing -->
+      <div class="card">
+        <div class="card-header-row">
+          <span class="card-header">Billing Gateway</span>
+          <span id="quota-plan" class="badge">FREE</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Credits Remaining</span>
+          <span id="quota-credits" class="metric-value">5 runs</span>
+        </div>
+        <label style="margin-top: 1rem;">Simulate Webhook</label>
+        <div class="btn-row">
+          <button id="mock-stripe-btn" class="btn btn-ghost">Stripe</button>
+          <button id="mock-razorpay-btn" class="btn btn-ghost">Razorpay</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = "http://localhost:8000";
+
+    const runBtn = document.getElementById("run-btn");
+    const taskInput = document.getElementById("task-input");
+    const terminal = document.getElementById("terminal");
+    const pipelineStatus = document.getElementById("pipeline-status");
+    const metricCost = document.getElementById("metric-cost");
+    const metricTokensIn = document.getElementById("metric-tokens-in");
+    const metricTokensOut = document.getElementById("metric-tokens-out");
+    const quotaPlan = document.getElementById("quota-plan");
+    const quotaCredits = document.getElementById("quota-credits");
+
+    let totalCost = 0, tokensIn = 0, tokensOut = 0;
+
+    function printLog(text, type = "info") {
+      const line = document.createElement("div");
+      line.className = `log ${type}`;
+      const ts = new Date().toLocaleTimeString("en-GB", { hour12: false });
+      line.innerHTML = `<span class="ts">${ts}</span><span class="msg">${text}</span>`;
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function resetNodes() {
+      document.querySelectorAll(".node").forEach(n => { n.className = "node"; });
+    }
+
+    function setStatus(label, type) {
+      pipelineStatus.textContent = label;
+      pipelineStatus.style.background = type === "running"
+        ? "rgba(210,153,34,0.12)" : type === "success"
+        ? "rgba(63,185,80,0.12)" : "";
+      pipelineStatus.style.color = type === "running"
+        ? "var(--warning)" : type === "success"
+        ? "var(--success)" : "";
+
+      const dot = document.querySelector(".status-dot");
+      if (dot) dot.className = `status-dot ${type}`;
+    }
+
+    async function updateQuota() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/billing/user/quota?user_id=user_1`);
+        const data = await res.json();
+        quotaPlan.textContent = data.plan.toUpperCase();
+        quotaCredits.textContent = `${data.remaining_credits} runs`;
+      } catch (_) {}
+    }
+
+    function initSSE() {
+      printLog("Connecting to SSE stream...", "info");
+      const es = new EventSource(`${BACKEND_URL}/api/stream`);
+
+      es.addEventListener("step_status", (e) => {
+        const { node, status, token_usage, run_cost_usd } = JSON.parse(e.data);
+        printLog(`node:${node} → ${status.toUpperCase()}`, "event");
+        const el = document.getElementById(`node-${node}`);
+        if (el) el.className = `node ${status}`;
+        if (status === "success") {
+          totalCost += run_cost_usd;
+          tokensIn += token_usage.input;
+          tokensOut += token_usage.output;
+          metricCost.textContent = `$${totalCost.toFixed(4)}`;
+          metricTokensIn.textContent = tokensIn;
+          metricTokensOut.textContent = tokensOut;
+        }
+      });
+
+      es.addEventListener("run_complete", (e) => {
+        const { status, reason, artifacts } = JSON.parse(e.data);
+        if (status === "success") {
+          printLog(`Done. Download: ${artifacts.download_url}`, "success");
+          setStatus("DONE", "success");
+        } else {
+          printLog(`Failed: ${reason}`, "error");
+          setStatus("FAILED", "error");
+        }
+        runBtn.disabled = false;
+        updateQuota();
+      });
+
+      es.onerror = () => printLog("SSE disconnected. Reconnecting...", "error");
+    }
+
+    runBtn.addEventListener("click", async () => {
+      runBtn.disabled = true;
+      resetNodes();
+      setStatus("RUNNING", "running");
+      printLog(`Starting: "${taskInput.value}"`, "running");
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/run-pipeline`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ task: taskInput.value })
+        });
+        const data = await res.json();
+        printLog(`Queued. Run ID: ${data.run_id}`, "info");
+      } catch (err) {
+        printLog(`Trigger failed: ${err.message}`, "error");
+        runBtn.disabled = false;
+      }
+    });
+
+    document.getElementById("mock-stripe-btn").addEventListener("click", async () => {
+      printLog("Sending mock Stripe webhook...", "info");
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/billing/webhook/stripe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Stripe-Signature": "t=12345,v1=mocksig" },
+          body: JSON.stringify({ type: "checkout.session.completed", data: { object: { client_reference_id: "user_1" } } })
+        });
+        const data = await res.json();
+        printLog(`Stripe: ${JSON.stringify(data)}`, "success");
+        updateQuota();
+      } catch (err) { printLog(`Stripe failed: ${err.message}`, "error"); }
+    });
+
+    document.getElementById("mock-razorpay-btn").addEventListener("click", async () => {
+      printLog("Sending mock Razorpay webhook...", "info");
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/billing/webhook/razorpay`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Razorpay-Signature": "mocksig" },
+          body: JSON.stringify({ event: "payment.captured", payload: { payment: { entity: { email: "user_1@example.com" } } } })
+        });
+        const data = await res.json();
+        printLog(`Razorpay: ${JSON.stringify(data)}`, "success");
+        updateQuota();
+      } catch (err) { printLog(`Razorpay failed: ${err.message}`, "error"); }
+    });
+
+    updateQuota();
+    initSSE();
+  </script>
+</body>
+</html>
