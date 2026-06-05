@@ -1,4 +1,4 @@
-# Agentic SaaS Boilerplate
+﻿# Agentic SaaS Boilerplate
 
 > **Launch multi-agent-powered SaaS products today, not prototypes.**
 
@@ -7,7 +7,7 @@
 [![Node Standard](https://img.shields.io/badge/Node-ESModules-brightgreen.svg)](package.json)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-blue.svg)](requirements.txt)
 
-I built [Agency OS](https://github.com/shubham0086/agency-os) on this engine — a 6-agent marketing platform that runs internally today. This repo is that engine, extracted and packaged so you can build your own.
+I built [Agency OS](https://github.com/shubham0086/agency-os) on this engine: a 6-agent marketing platform that runs internally today. This repo is that engine, extracted and packaged so you can build your own.
 
 Most AI SaaS tutorials show you how to call an API. They skip the parts that actually take weeks: scheduling agents in parallel, streaming live status to the UI without polling, handling payments from two continents, and keeping the system alive when an LLM goes down. This boilerplate solves all four.
 
@@ -57,13 +57,13 @@ graph TD
 ## What This Solves
 
 ### DAG Scheduler (`dag_engine.py`)
-Linear agent chains break when you need parallel execution. This is a zero-dependency Python DAG scheduler using Kahn's Algorithm — runs Planner first, then Copywriter and ImageGenerator in parallel, then Verifier only after both finish. State passes between nodes as a typed dict. No Celery, no external dependencies.
+Linear agent chains break when you need parallel execution. This is a zero-dependency Python DAG scheduler using Kahn's Algorithm: runs Planner first, then Copywriter and ImageGenerator in parallel, then Verifier only after both finish. State passes between nodes as a typed dict. No Celery, no external dependencies.
 
 ### SSE Streaming (`sse_broadcaster.py`)
 Agent workflows take 15-90 seconds. Polling is terrible UX. This broadcasts live node status transitions (`planning → writing → complete`) and per-node token costs directly to the browser via Server-Sent Events at sub-100ms latency. The dashboard visualizes the DAG in real time.
 
 ### Geo-Routed Billing (`billing_router.py`)
-Stripe doesn't work well for INR payments. Razorpay doesn't work for USD. This router sends international payments to Stripe and Indian payments to Razorpay — both with HMAC-SHA256 signature verification in constant time (no timing attack vectors). One webhook endpoint handles both.
+Stripe doesn't work well for INR payments. Razorpay doesn't work for USD. This router sends international payments to Stripe and Indian payments to Razorpay: both with HMAC-SHA256 signature verification in constant time (no timing attack vectors). One webhook endpoint handles both.
 
 ---
 
