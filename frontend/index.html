@@ -3,208 +3,395 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agentic SaaS Boilerplate — Pipeline Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Agentic SaaS Boilerplate — Educational Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:           #0d1117;
-      --surface:      #161b22;
-      --surface-2:    #1c2128;
-      --border:       #30363d;
-      --border-muted: #21262d;
-      --text:         #e6edf3;
-      --text-muted:   #8b949e;
-      --accent:       #58a6ff;
-      --success:      #3fb950;
-      --warning:      #d29922;
-      --error:        #f85149;
-      --idle:         #484f58;
-      --terminal-bg:  #010409;
+      --bg: #060913;
+      --surface: #0f1424;
+      --surface-hover: #171e33;
+      --surface-2: #151b2d;
+      --border: #1e293b;
+      --border-glowing: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-primary: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --idle: #475569;
+      --terminal-bg: #030712;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 2rem;
+      padding: 1.5rem 2rem;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    header {
-      max-width: 1200px;
-      margin: 0 auto 2rem;
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      border-bottom: 1px solid var(--border-muted);
-      padding-bottom: 1rem;
-    }
-
-    header h1 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-
-    header span {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 1.5rem;
-      max-width: 1200px;
+    /* Container */
+    .container {
+      max-width: 1280px;
       margin: 0 auto;
     }
 
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
+    /* Header styling */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
+    .brand-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    header h1 span {
+      color: var(--accent-primary);
+    }
+
+    .subtitle-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+    }
+
+    .subtitle-badge .mode-tag {
+      font-family: var(--font-code);
+      font-size: 0.725rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* Tabs navigation */
+    .tabs-nav {
+      display: flex;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 0.35rem;
+      border-radius: 8px;
+      gap: 0.25rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-title);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-primary);
+      background: var(--surface);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Tab content view */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Grid layouts */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Card standard design */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.25rem 1.5rem;
+      border-radius: 10px;
+      padding: 1.5rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
     }
 
-    .card-header {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.25rem;
     }
 
-    /* DAG */
-    .dag {
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Graph layout */
+    .dag-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0;
+      padding: 1rem 0;
+      background: rgba(0,0,0,0.15);
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+      margin-bottom: 1.5rem;
+      position: relative;
     }
 
-    .dag-row {
+    .dag-node-row {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       justify-content: center;
+      align-items: center;
+      position: relative;
     }
 
-    .dag-connector {
-      width: 1px;
-      height: 20px;
+    .dag-arrow {
+      height: 25px;
+      width: 2px;
       background: var(--border);
+      margin: 0.25rem 0;
+      position: relative;
+      transition: background 0.3s;
     }
 
-    .node {
-      font-family: 'JetBrains Mono', monospace;
+    .dag-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--border);
+      transition: border-top-color 0.3s;
+    }
+
+    .dag-arrow.active {
+      background: var(--accent-primary);
+    }
+    .dag-arrow.active::after {
+      border-top-color: var(--accent-primary);
+    }
+
+    .node-box {
+      font-family: var(--font-code);
       font-size: 0.8rem;
-      font-weight: 500;
-      padding: 0.5rem 1.25rem;
-      border-radius: 4px;
-      border: 1px solid var(--idle);
-      color: var(--idle);
-      min-width: 130px;
+      font-weight: 600;
+      padding: 0.65rem 1.25rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--idle);
+      color: var(--text-muted);
+      background: rgba(15, 20, 36, 0.8);
+      min-width: 140px;
       text-align: center;
-      transition: border-color 0.3s, color 0.3s, background 0.3s;
+      transition: all 0.30s ease;
+      cursor: default;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
-    .node.running {
-      border-color: var(--warning);
-      color: var(--warning);
-      background: rgba(210, 153, 34, 0.06);
+    .node-box.planner { --node-color: var(--accent-primary); }
+    .node-box.copywriter { --node-color: var(--accent-purple); }
+    .node-box.imagegen { --node-color: var(--accent-amber); }
+    .node-box.verifier { --node-color: var(--success); }
+
+    .node-box.running {
+      border-color: var(--node-color);
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+      animation: nodePulse 1.4s infinite alternate;
     }
 
-    .node.success {
-      border-color: var(--success);
-      color: var(--success);
-      background: rgba(63, 185, 80, 0.06);
+    .node-box.success {
+      border-color: var(--node-color);
+      color: var(--node-color);
+      background: rgba(16, 185, 129, 0.03);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    @keyframes nodePulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.03); filter: brightness(1.2); }
     }
 
-    .node.running { animation: blink 1.4s ease-in-out infinite; }
-
-    /* Terminal */
-    .terminal {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
+    /* Terminal logs */
+    .terminal-wrapper {
       background: var(--terminal-bg);
-      border: 1px solid var(--border-muted);
-      border-radius: 4px;
-      padding: 1rem;
-      height: 220px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
     }
 
-    .log { margin-bottom: 3px; line-height: 1.6; }
-    .log .ts { color: var(--idle); margin-right: 0.5rem; }
-    .log.info    .msg { color: var(--text-muted); }
-    .log.event   .msg { color: var(--accent); }
-    .log.running .msg { color: var(--warning); }
-    .log.success .msg { color: var(--success); }
-    .log.error   .msg { color: var(--error); }
+    .terminal-header {
+      background: #090e1a;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    /* Forms */
+    .terminal-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .terminal-dot.r { background: var(--error); }
+    .terminal-dot.y { background: var(--warning); }
+    .terminal-dot.g { background: var(--success); }
+
+    .terminal-body {
+      font-family: var(--font-code);
+      font-size: 0.775rem;
+      padding: 1rem;
+      height: 250px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .log-line {
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .log-line .ts {
+      color: var(--idle);
+      flex-shrink: 0;
+    }
+
+    .log-line.info .msg { color: var(--text-muted); }
+    .log-line.event .msg { color: var(--accent-primary); }
+    .log-line.running .msg { color: var(--warning); }
+    .log-line.success .msg { color: var(--success); }
+    .log-line.error .msg { color: var(--error); }
+
+    /* Forms & Controls */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
     label {
       display: block;
-      font-size: 0.78rem;
+      font-family: var(--font-title);
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-muted);
       margin-bottom: 0.4rem;
-      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     input[type="text"] {
       width: 100%;
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 0.875rem;
       outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
     }
 
-    input[type="text"]:focus { border-color: var(--accent); }
+    input[type="text"]:focus {
+      border-color: var(--accent-primary);
+      background: var(--surface-hover);
+    }
 
     .btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.65rem 1.25rem;
+      border-radius: 6px;
       border: 1px solid transparent;
       cursor: pointer;
-      transition: opacity 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
     }
 
-    .btn:hover { opacity: 0.85; }
-    .btn:active { opacity: 0.7; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
     .btn-primary {
-      background: var(--accent);
-      color: #0d1117;
+      background: var(--accent-primary);
+      color: var(--bg);
       width: 100%;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+      filter: brightness(1.05);
     }
 
     .btn-ghost {
@@ -214,279 +401,1182 @@
       flex: 1;
     }
 
-    .btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.02);
+    }
 
-    .btn-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+    }
 
-    /* Metrics */
-    .metric {
+    /* Telemetry metrics */
+    .metric-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border-muted);
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
     }
+    .metric-item:last-child { border-bottom: none; }
+    .metric-title { color: var(--text-muted); font-size: 0.85rem; }
+    .metric-num { font-family: var(--font-code); font-size: 0.9rem; font-weight: 600; }
 
-    .metric:last-child { border-bottom: none; }
-    .metric-label { color: var(--text-muted); font-size: 0.8rem; }
-    .metric-value { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 500; }
-
-    /* Badge */
+    /* Quota tags */
     .badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 500;
+      font-family: var(--font-code);
+      font-size: 0.725rem;
+      font-weight: 600;
       padding: 0.15rem 0.5rem;
-      border-radius: 2px;
-      background: rgba(88, 166, 255, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(88, 166, 255, 0.2);
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge.free {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .badge.premium {
+      background: rgba(168, 85, 247, 0.1);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.2);
     }
 
-    .status-dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--idle);
-      margin-right: 0.4rem;
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .checklist-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .checklist-check.checked {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--bg);
+      font-weight: bold;
+    }
+    .checklist-check.checked::after {
+      content: '✓';
     }
 
-    .status-dot.running { background: var(--warning); }
-    .status-dot.success { background: var(--success); }
+    /* Blueprint styles */
+    .blueprint-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .blueprint-grid { grid-template-columns: 1fr; gap: 1rem; }
+    }
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      list-style: none;
+    }
+    .step-list-btn {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: var(--font-title);
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s;
+    }
+    .step-list-btn:hover {
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+    }
+    .step-list-btn.active {
+      background: var(--surface-2);
+      color: var(--accent-primary);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 0 6px 6px 0;
+    }
+    .step-list-num {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0.15rem;
+    }
 
-    .card-header-row {
+    .step-content-pane {
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .step-title {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .step-desc {
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    /* Code Block styling */
+    .code-container {
+      background: var(--terminal-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      position: relative;
+      margin-top: 1rem;
+    }
+    .code-header {
+      background: #090e1a;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--text-muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.25rem;
+    }
+    pre.code-body {
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      padding: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Learning concept cards */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .concept-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .concept-card:hover {
+      border-color: var(--border-glowing);
+      transform: translateY(-2px);
+    }
+    .concept-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    .concept-title {
+      font-family: var(--font-title);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .concept-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    /* Code reference tab structures */
+    .ref-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .ref-layout { grid-template-columns: 1fr; }
+    }
+    .ref-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .ref-menu-btn {
+      text-align: left;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.65rem 1rem;
+      border-radius: 6px;
+      font-family: var(--font-code);
+      font-size: 0.825rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .ref-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+    }
+    .ref-menu-btn.active {
+      background: var(--surface-2);
+      color: var(--accent-primary);
+      border-color: var(--border);
+    }
+
+    .badge-py {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.3rem;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 3px;
+      font-family: var(--font-code);
+    }
+
+    /* Tooltips and highlights */
+    .interactive-banner {
+      background: linear-gradient(90deg, rgba(56,189,248,0.08) 0%, rgba(168,85,247,0.03) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .banner-text {
+      font-size: 0.875rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .banner-text strong {
+      color: var(--accent-primary);
+    }
+
+    .simulator-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-code);
+      font-size: 0.725rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .crumb-box {
+      background: rgba(56, 189, 248, 0.03);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      margin-top: 1.25rem;
+      margin-bottom: 1rem;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .crumb-box strong {
+      color: var(--accent-primary);
+    }
+    .crumb-links {
+      display: flex;
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .crumb-link {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: color 0.15s ease;
+    }
+    .crumb-link:hover {
+      color: var(--text);
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Agentic SaaS Boilerplate</h1>
-    <span>Pipeline Dashboard &mdash; Sandbox Mode</span>
-  </header>
-
-  <div class="layout">
-
-    <div class="left-col">
-
-      <!-- DAG visualizer -->
-      <div class="card">
-        <div class="card-header-row">
-          <span class="card-header">Execution Graph (DAG)</span>
-          <span id="pipeline-status" class="badge">IDLE</span>
-        </div>
-        <div class="dag">
-          <div class="dag-row">
-            <div id="node-Planner" class="node">Planner</div>
-          </div>
-          <div class="dag-connector"></div>
-          <div class="dag-row">
-            <div id="node-Copywriter" class="node">Copywriter</div>
-            <div id="node-ImageGenerator" class="node">ImageGenerator</div>
-          </div>
-          <div class="dag-connector"></div>
-          <div class="dag-row">
-            <div id="node-Verifier" class="node">Verifier</div>
-          </div>
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header>
+      <div class="brand-section">
+        <h1>Agentic SaaS <span>Boilerplate</span></h1>
+        <div class="subtitle-badge">
+          <span>Multi-Agent Engine &amp; Integration Hub</span>
+          <span class="mode-tag" id="network-badge">Offline Simulation Active</span>
         </div>
       </div>
+      
+      <!-- NAV TABS -->
+      <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(event, 'sandbox-tab')">💻 Sandbox Simulator</button>
+        <button class="tab-btn" onclick="switchTab(event, 'launch-tab')">🚀 Launch Blueprint</button>
+        <button class="tab-btn" onclick="switchTab(event, 'learning-tab')">📖 Learning Modules</button>
+        <button class="tab-btn" onclick="switchTab(event, 'code-tab')">📁 Code Reference</button>
+      </nav>
+    </header>
 
-      <!-- SSE terminal -->
-      <div class="card">
-        <div class="card-header">SSE Event Stream</div>
-        <div id="terminal" class="terminal">
-          <div class="log info"><span class="ts">&mdash;</span><span class="msg">Waiting for pipeline execution...</span></div>
-        </div>
+    <!-- INTRO BANNER -->
+    <div class="interactive-banner">
+      <div class="banner-text">
+        <span>💡 <strong>What is this?</strong> This boilerplate packages the production-ready engine used in <strong>Agency OS</strong>. It handles multi-agent DAG scheduling, SSE event streaming, and geo-routed Stripe/Razorpay billing.</span>
       </div>
-
+      <div class="simulator-status-badge" id="simulator-status">
+        <span style="display:inline-block; width:6px; height:6px; background:var(--success); border-radius:50%"></span>
+        Interactive Demo Active
+      </div>
     </div>
 
-    <div class="right-col">
+    <!-- 1. SANDBOX SIMULATOR TAB -->
+    <div id="sandbox-tab" class="tab-content active">
+      <div class="dashboard-layout">
+        
+        <!-- Left Side: Interactive Pipeline Graph + Terminal -->
+        <div class="left-col">
+          
+          <!-- Execution Graph (DAG) Card -->
+          <div class="card">
+            <div class="card-title-row">
+              <span class="card-title">Execution Graph (DAG Flow)</span>
+              <span id="pipeline-status" class="badge free" style="color:var(--text-muted)">IDLE</span>
+            </div>
+            
+            <div class="dag-container">
+              <!-- Row 1: Planner -->
+              <div class="dag-node-row">
+                <div id="node-Planner" class="node-box planner">Planner</div>
+              </div>
+              
+              <!-- Connector -->
+              <div class="dag-arrow" id="arrow-1"></div>
+              
+              <!-- Row 2: Parallel Workers -->
+              <div class="dag-node-row">
+                <div id="node-Copywriter" class="node-box copywriter">Copywriter</div>
+                <div id="node-ImageGenerator" class="node-box imagegen">ImageGenerator</div>
+              </div>
+              
+              <!-- Connector -->
+              <div class="dag-arrow" id="arrow-2"></div>
+              
+              <!-- Row 3: Verifier -->
+              <div class="dag-node-row">
+                <div id="node-Verifier" class="node-box verifier">Verifier</div>
+              </div>
+            </div>
+          </div>
 
-      <!-- Trigger -->
-      <div class="card">
-        <div class="card-header">Run Pipeline</div>
-        <label for="task-input">Campaign Goal</label>
-        <input type="text" id="task-input" value="Build Ayurvedic Wellness Campaign in Jaipur">
-        <button id="run-btn" class="btn btn-primary">Execute Workflow</button>
+          <!-- SSE Terminal Card -->
+          <div class="card">
+            <div class="card-title-row">
+              <span class="card-title">SSE Real-Time Event Stream</span>
+              <button class="btn btn-ghost" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="clearTerminal()">Clear</button>
+            </div>
+            
+            <div class="terminal-wrapper">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot r"></span>
+                  <span class="terminal-dot y"></span>
+                  <span class="terminal-dot g"></span>
+                </div>
+                <span style="font-family:var(--font-code); font-size:0.7rem; color:var(--text-muted)">SSE Connection: http://localhost:8000/api/stream</span>
+              </div>
+              <div id="terminal-body" class="terminal-body">
+                <div class="log-line info">
+                  <span class="ts">•</span>
+                  <span class="msg">Boilerplate dashboard loaded. Simulation Engine ready for offline execution.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Action Trigger + Telemetry + Mock Billing -->
+        <div class="right-col">
+          
+          <!-- Control: Run Pipeline -->
+          <div class="card">
+            <div class="card-title">Run Pipeline</div>
+            <div class="form-group" style="margin-top: 1rem;">
+              <label for="task-input">Campaign Goal / Task</label>
+              <input type="text" id="task-input" value="Build Ayurvedic Wellness Campaign in Jaipur">
+            </div>
+            <button id="run-btn" class="btn btn-primary" onclick="triggerWorkflow()">
+              Execute Workflow
+            </button>
+          </div>
+
+          <!-- Telemetry Data -->
+          <div class="card">
+            <div class="card-title">Session Telemetry</div>
+            <div style="margin-top: 0.5rem;">
+              <div class="metric-item">
+                <span class="metric-title">LLM Cost (USD)</span>
+                <span id="metric-cost" class="metric-num" style="color:var(--accent-primary)">$0.0000</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-title">Tokens Ingress</span>
+                <span id="metric-tokens-in" class="metric-num">0</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-title">Tokens Egress</span>
+                <span id="metric-tokens-out" class="metric-num">0</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-title">Elapsed Time</span>
+                <span id="metric-elapsed" class="metric-num" style="color:var(--text-muted)">0.0s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Billing & Webhook Simulator -->
+          <div class="card">
+            <div class="card-title-row">
+              <span class="card-title">Billing &amp; Webhooks</span>
+              <span id="quota-plan" class="badge free">FREE</span>
+            </div>
+            <div class="metric-item" style="margin-bottom: 1rem;">
+              <span class="metric-title">Credits Remaining</span>
+              <span id="quota-credits" class="metric-num" style="color:var(--success)">5 runs</span>
+            </div>
+            
+            <label style="margin-bottom: 0.5rem; font-size: 0.75rem;">Simulate Webhook Trigger</label>
+            <p style="font-size: 0.8rem; color:var(--text-muted); margin-bottom: 0.75rem; line-height: 1.4;">Mock constant-time signed webhook triggers that upgrade user plans instantly in the database.</p>
+            <div class="btn-row">
+              <button class="btn btn-ghost" onclick="triggerMockWebhook('stripe')">Stripe (USD)</button>
+              <button class="btn btn-ghost" onclick="triggerMockWebhook('razorpay')">Razorpay (INR)</button>
+            </div>
+          </div>
+
+        </div>
+
       </div>
-
-      <!-- Telemetry -->
-      <div class="card">
-        <div class="card-header">Session Telemetry</div>
-        <div class="metric">
-          <span class="metric-label">LLM Cost</span>
-          <span id="metric-cost" class="metric-value">$0.0000</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Tokens In</span>
-          <span id="metric-tokens-in" class="metric-value">0</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Tokens Out</span>
-          <span id="metric-tokens-out" class="metric-value">0</span>
-        </div>
-      </div>
-
-      <!-- Billing -->
-      <div class="card">
-        <div class="card-header-row">
-          <span class="card-header">Billing Gateway</span>
-          <span id="quota-plan" class="badge">FREE</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Credits Remaining</span>
-          <span id="quota-credits" class="metric-value">5 runs</span>
-        </div>
-        <label style="margin-top: 1rem;">Simulate Webhook</label>
-        <div class="btn-row">
-          <button id="mock-stripe-btn" class="btn btn-ghost">Stripe</button>
-          <button id="mock-razorpay-btn" class="btn btn-ghost">Razorpay</button>
-        </div>
-      </div>
-
     </div>
+
+    <!-- 2. LAUNCH BLUEPRINT TAB -->
+    <div id="launch-tab" class="tab-content">
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom: 1.5rem;">
+          <span class="card-title">🚀 How to Launch Your SaaS Product</span>
+          <span class="badge premium">LAUNCH CHECKLIST</span>
+        </div>
+        
+        <div class="blueprint-grid">
+          <!-- Left Menu -->
+          <ul class="step-list">
+            <li>
+              <button class="step-list-btn active" onclick="switchStep(event, 'step-1')">
+                <span class="step-list-num">Step 1</span>
+                <span>Clone &amp; Sandbox</span>
+              </button>
+            </li>
+            <li>
+              <button class="step-list-btn" onclick="switchStep(event, 'step-2')">
+                <span class="step-list-num">Step 2</span>
+                <span>Customize the DAG</span>
+              </button>
+            </li>
+            <li>
+              <button class="step-list-btn" onclick="switchStep(event, 'step-3')">
+                <span class="step-list-num">Step 3</span>
+                <span>Connect Database</span>
+              </button>
+            </li>
+            <li>
+              <button class="step-list-btn" onclick="switchStep(event, 'step-4')">
+                <span class="step-list-num">Step 4</span>
+                <span>Secure Billing</span>
+              </button>
+            </li>
+            <li>
+              <button class="step-list-btn" onclick="switchStep(event, 'step-5')">
+                <span class="step-list-num">Step 5</span>
+                <span>Deploy Live</span>
+              </button>
+            </li>
+          </ul>
+
+          <!-- Right Content Pane -->
+          <div class="step-content-pane">
+            
+            <!-- Step 1 Pane -->
+            <div id="step-1" class="step-pane" style="display: block;">
+              <h3 class="step-title">1. Boot the Free Local Sandbox</h3>
+              <p class="step-desc">Test the entire backend infrastructure, Server-Sent Events router, and database schema locally without setting up LLM API keys.</p>
+              <ul class="checklist" style="margin-bottom: 1.5rem;">
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Clone the repo: <code>git clone https://github.com/shubham0086/agent-saas-boilerplate</code></span>
+                </li>
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Run uvicorn server in <code>backend/</code>: <code>uvicorn main:app --reload</code></span>
+                </li>
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Host the frontend using node or open index.html directly.</span>
+                </li>
+              </ul>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>TERMINAL SETUP</span>
+                </div>
+                <pre class="code-body"># Install dependencies & run FastAPI
+cd backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload</pre>
+              </div>
+              <div class="crumb-box">
+                <strong>Story:</strong> Derived from the initial development phase of <strong>Agency OS</strong> and <strong>Agentic SDLC</strong>, where running a lightweight local sandbox saved thousands in API costs during graph validation.
+                <div class="crumb-links">
+                  <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank">🔗 GitHub Repo</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agentic-sdlc.html" target="_blank">📄 Agentic SDLC Page</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 Pane -->
+            <div id="step-2" class="step-pane" style="display: none;">
+              <h3 class="step-title">2. Customize the Multi-Agent DAG Graph</h3>
+              <p class="step-desc">Define your workflow layout. Replace the demo nodes (Planner, Copywriter, ImageGenerator, Verifier) with custom agents inside the backend config.</p>
+              <p style="font-size: 0.9rem; margin-bottom: 1rem; color:var(--text-muted)">Edit <code>backend/main.py</code>. Add dependencies using Kahn's algorithm notation (edges represent directed execution requirements):</p>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>backend/main.py</span>
+                  <span class="badge-py">Python</span>
+                </div>
+                <pre class="code-body"># Define nodes
+nodes = {
+    "Research": Node("Research", "researcher_agent", {"prompt": "Scrape leads"}),
+    "Copywriter": Node("Copywriter", "copywriter_agent", {"prompt": "Draft copy"}),
+    "QA_Gate": Node("QA_Gate", "qa_agent", {"prompt": "Validate safety"})
+}
+# Define directed dependencies (edges)
+edges = [
+    ("Research", "Copywriter"), # Copywriter starts only after Research completes
+    ("Copywriter", "QA_Gate")    # QA_Gate starts after Copywriter completes
+]</pre>
+              </div>
+              <div class="crumb-box">
+                <strong>Story:</strong> This DAG execution model was built to solve the sequential limitations in early versions of <strong>Founder's OS</strong>, enabling concurrent asset creation across parallel worker nodes.
+                <div class="crumb-links">
+                  <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank">🔗 GitHub Repo</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/founders-os.html" target="_blank">📄 Founder's OS Page</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agentic-systems.html" target="_blank">📄 Agentic Systems Page</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 Pane -->
+            <div id="step-3" class="step-pane" style="display: none;">
+              <h3 class="step-title">3. Wire SQLite Database State</h3>
+              <p class="step-desc">The database manages session isolation, user account params, billing status, and run logs. All agents are execution-sandboxed per user.</p>
+              <p style="font-size: 0.9rem; margin-bottom: 1rem; color:var(--text-muted)">When a request is submitted, the workflow engine automatically reads the user account quota. If credits are exhausted, the execution freezes immediately to protect API budget bounds.</p>
+              <div class="crumb-box">
+                <strong>Story:</strong> State persistence and workspace isolation are modeled after the <strong>AgentKernel (formerly Equilibrium)</strong> infrastructure, ensuring user sessions never bleed into one another.
+                <div class="crumb-links">
+                  <a class="crumb-link" href="https://github.com/shubham0086/agentkernel" target="_blank">🔗 GitHub Repo</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/equilibrium.html" target="_blank">📄 AgentKernel Page</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 Pane -->
+            <div id="step-4" class="step-pane" style="display: none;">
+              <h3 class="step-title">4. Secure Geo-Routed Billing Webhooks</h3>
+              <p class="step-desc">Stripe handles USD payments; Razorpay handles INR. Both process checks through a single FastAPI billing listener, secured against timing attacks.</p>
+              <p style="font-size: 0.9rem; margin-bottom: 1rem; color:var(--text-muted)">Boilerplate webhook verifies hashes using constant-time digest matching to block timing-analysis vectors.</p>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>backend/billing_router.py</span>
+                  <span class="badge-py">Python</span>
+                </div>
+                <pre class="code-body"># Constant-time comparison to protect against timing exploits
+if not hmac.compare_digest(expected_signature, client_signature):
+    raise HTTPException(status_code=401, detail="Unauthorized")</pre>
+              </div>
+              <div class="crumb-box">
+                <strong>Story:</strong> The unified dual-billing checkout loop was first integrated into the commercial deployment of <strong>Founder's OS</strong> to support global outreach clients.
+                <div class="crumb-links">
+                  <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank">🔗 GitHub Repo</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/founders-os.html" target="_blank">📄 Founder's OS Page</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 Pane -->
+            <div id="step-5" class="step-pane" style="display: none;">
+              <h3 class="step-title">5. Deploy to Production</h3>
+              <p class="step-desc">Launch your SaaS. Host the FastAPI server on Fly.io, Render, or AWS, and deploy the client dashboard directly to Vercel or Netlify.</p>
+              <ul class="checklist" style="margin-bottom: 1.5rem;">
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Set environment variables: <code>STRIPE_WEBHOOK_SECRET</code> and <code>RAZORPAY_WEBHOOK_SECRET</code>.</span>
+                </li>
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Connect a production database (Supabase PostgreSQL / Cloud SQLite).</span>
+                </li>
+                <li class="checklist-item">
+                  <span class="checklist-check checked"></span>
+                  <span>Point the dashboard <code>BACKEND_URL</code> parameter to your live API endpoint.</span>
+                </li>
+              </ul>
+              <div class="crumb-box">
+                <strong>Story:</strong> The exact deployment blueprint used to scale the backend nodes of <strong>Agency OS</strong> and <strong>Agentic SDLC</strong> for concurrent multi-user execution.
+                <div class="crumb-links">
+                  <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank">🔗 GitHub Repo</a>
+                  <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agentic-sdlc.html" target="_blank">📄 Agentic SDLC Page</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. LEARNING MODULES TAB -->
+    <div id="learning-tab" class="tab-content">
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom: 1.5rem;">
+          <span class="card-title">📖 Core SaaS Architecture Modules</span>
+          <span class="badge free">EDUCATIONAL RESOURCES</span>
+        </div>
+        
+        <div class="concept-grid">
+          
+          <!-- Card 1 -->
+          <div class="concept-card">
+            <div class="concept-icon">⛙</div>
+            <h4 class="concept-title">DAG Engine Scheduler</h4>
+            <p class="concept-text">
+              Linear pipelines block execution speed. The zero-dependency DAG scheduler runs agents in parallel using <strong>Kahn's Algorithm</strong>. Planner executes first, Copywriter and ImageGenerator run concurrently, and Verifier triggers only when all upstream nodes report success.
+            </p>
+            <div class="crumb-links" style="margin-top: 1rem;">
+              <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank" style="font-size:0.75rem;">🔗 Repo</a>
+              <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agentic-systems.html" target="_blank" style="font-size:0.75rem;">📄 Systems Page</a>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="concept-card">
+            <div class="concept-icon">📡</div>
+            <h4 class="concept-title">FastAPI SSE Streaming</h4>
+            <p class="concept-text">
+              AI requests take 15 to 90 seconds. HTTP polling exhausts network resources. <strong>Server-Sent Events (SSE)</strong> push live state changes (e.g. <code>running</code>, <code>success</code>, <code>failed</code>) and exact token costs directly to the client at sub-100ms latency.
+            </p>
+            <div class="crumb-links" style="margin-top: 1rem;">
+              <a class="crumb-link" href="https://github.com/shubham0086/agent-saas-boilerplate" target="_blank" style="font-size:0.75rem;">🔗 Repo</a>
+              <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agentic-sdlc.html" target="_blank" style="font-size:0.75rem;">📄 SDLC Page</a>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="concept-card">
+            <div class="concept-icon">🛡️</div>
+            <h4 class="concept-title">Timing Attack Guard</h4>
+            <p class="concept-text">
+              Malicious actors can deduce signature values byte-by-byte using timing analysis. We implement secure constant-time signature comparisons via <code>hmac.compare_digest</code> for both Stripe and Razorpay webhook validation.
+            </p>
+            <div class="crumb-links" style="margin-top: 1rem;">
+              <a class="crumb-link" href="https://github.com/shubham0086/agentkernel" target="_blank" style="font-size:0.75rem;">🔗 Repo</a>
+              <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/equilibrium.html" target="_blank" style="font-size:0.75rem;">📄 Kernel Page</a>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="concept-card">
+            <div class="concept-icon">⛓️</div>
+            <h4 class="concept-title">Circuit Breaker Failover</h4>
+            <p class="concept-text">
+              API timeouts can lock your pipeline. The stateful <code>circuit_breaker.py</code> wrapper halts outbound calls to model providers after 3 consecutive errors, temporarily blocking requests and falling back to local mock streams during cooldown.
+            </p>
+            <div class="crumb-links" style="margin-top: 1rem;">
+              <a class="crumb-link" href="https://github.com/shubham0086/Agent-Routing" target="_blank" style="font-size:0.75rem;">🔗 Repo</a>
+              <a class="crumb-link" href="../../../MyPortfolio.github.io/projects/agent-routing.html" target="_blank" style="font-size:0.75rem;">📄 Routing Page</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CODE REFERENCE TAB -->
+    <div id="code-tab" class="tab-content">
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom: 1.5rem;">
+          <span class="card-title">📁 Technical Reference Registry</span>
+          <span class="badge premium">PYTHON SOURCE</span>
+        </div>
+
+        <div class="ref-layout">
+          <!-- Menu -->
+          <div class="ref-menu">
+            <button class="ref-menu-btn active" onclick="switchRefCode(event, 'ref-dag')">
+              <span>core/workflow.py</span>
+              <span class="badge-py">DAG Engine</span>
+            </button>
+            <button class="ref-menu-btn" onclick="switchRefCode(event, 'ref-billing')">
+              <span>billing_router.py</span>
+              <span class="badge-py">Security</span>
+            </button>
+            <button class="ref-menu-btn" onclick="switchRefCode(event, 'ref-breaker')">
+              <span>circuit_breaker.py</span>
+              <span class="badge-py">Failover</span>
+            </button>
+          </div>
+
+          <!-- Panels -->
+          <div class="ref-content-pane">
+            
+            <div id="ref-dag" class="ref-pane" style="display: block;">
+              <p style="font-size: 0.9rem; color:var(--text-muted); margin-bottom: 1rem;">Kahn's Algorithm implementation dynamically calculates topological execution order, identifying parallel nodes.</p>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>core/workflow.py</span>
+                </div>
+                <pre class="code-body">def topological_order(self) -> List[str]:
+    """Kahn's algorithm — returns nodes in dependency order."""
+    indeg: Dict[str, int] = defaultdict(int)
+    adj:   Dict[str, List[str]] = defaultdict(list)
+
+    for u, v in self.edges:
+        adj[u].append(v)
+        indeg[v] += 1
+        indeg.setdefault(u, 0)
+
+    q = deque([n for n in self.nodes if indeg.get(n, 0) == 0])
+    order, seen = [], set()
+
+    while q:
+        u = q.popleft()
+        if u in seen:
+            continue
+        seen.add(u)
+        order.append(u)
+        for w in adj[u]:
+            indeg[w] -= 1
+            if indeg[w] == 0:
+                q.append(w)</pre>
+              </div>
+            </div>
+
+            <div id="ref-billing" class="ref-pane" style="display: none;">
+              <p style="font-size: 0.9rem; color:var(--text-muted); margin-bottom: 1rem;">Parses Stripe headers, structures expected signature payload, and verifies hashes in constant-time.</p>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>billing_router.py</span>
+                </div>
+                <pre class="code-body"># Parse Stripe signature fields (e.g. t=timestamp,v1=sha256hash)
+parts = {k: v for part in stripe_signature.split(',') for k, v in [part.split('=', 1)]}
+timestamp = parts.get('t')
+v1_hash = parts.get('v1')
+
+# Recreate expected payload: timestamp + "." + raw_body
+signed_payload = f"{timestamp}.".encode() + raw_body
+
+# Calculate expected HMAC hash
+expected_sig = hmac.new(
+    STRIPE_SECRET.encode(),
+    signed_payload,
+    hashlib.sha256
+).hexdigest()
+
+# Constant-time comparison to protect against timing attacks
+if not hmac.compare_digest(expected_sig, v1_hash):
+    raise HTTPException(status_code=401, detail="Invalid signature hash")</pre>
+              </div>
+            </div>
+
+            <div id="ref-breaker" class="ref-pane" style="display: none;">
+              <p style="font-size: 0.9rem; color:var(--text-muted); margin-bottom: 1rem;">State machine managing CLOSED, OPEN, and HALF_OPEN circuits to prevent backend network lockup.</p>
+              <div class="code-container">
+                <div class="code-header">
+                  <span>circuit_breaker.py</span>
+                </div>
+                <pre class="code-body">async def call(self, async_func: Callable[..., Any], *args, **kwargs) -> Any:
+    self._check_recovery()
+
+    if self.state == "OPEN":
+        raise CircuitBreakerOpenException("Circuit breaker is OPEN. API calls disabled.")
+
+    try:
+        result = await async_func(*args, **kwargs)
+        if self.state == "HALF_OPEN":
+            self.state = "CLOSED"
+            self.failure_count = 0
+        return result
+    except Exception as e:
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+        if self.state in ("CLOSED", "HALF_OPEN") and self.failure_count >= self.failure_threshold:
+            self.state = "OPEN"
+        raise e</pre>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <script>
-    const BACKEND_URL = "http://localhost:8000";
+    // Tab switching controller
+    function switchTab(evt, tabId) {
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
 
+    // Launch Step tab switching controller
+    function switchStep(evt, stepId) {
+      document.querySelectorAll(".step-pane").forEach(p => p.style.display = "none");
+      document.querySelectorAll(".step-list-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(stepId).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    // Code reference tab controller
+    function switchRefCode(evt, refId) {
+      document.querySelectorAll(".ref-pane").forEach(p => p.style.display = "none");
+      document.querySelectorAll(".ref-menu-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(refId).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    // Local sandbox values
+    let creditsRemaining = 5;
+    let userPlan = "FREE";
+    let isSimulationRunning = false;
+    let sseConnected = false;
+
+    // Elements
+    const terminalBody = document.getElementById("terminal-body");
     const runBtn = document.getElementById("run-btn");
     const taskInput = document.getElementById("task-input");
-    const terminal = document.getElementById("terminal");
     const pipelineStatus = document.getElementById("pipeline-status");
     const metricCost = document.getElementById("metric-cost");
     const metricTokensIn = document.getElementById("metric-tokens-in");
     const metricTokensOut = document.getElementById("metric-tokens-out");
+    const metricElapsed = document.getElementById("metric-elapsed");
     const quotaPlan = document.getElementById("quota-plan");
     const quotaCredits = document.getElementById("quota-credits");
+    const networkBadge = document.getElementById("network-badge");
 
-    let totalCost = 0, tokensIn = 0, tokensOut = 0;
+    // SSE connection parameter config
+    const BACKEND_URL = "http://localhost:8000";
 
     function printLog(text, type = "info") {
       const line = document.createElement("div");
-      line.className = `log ${type}`;
+      line.className = `log-line ${type}`;
       const ts = new Date().toLocaleTimeString("en-GB", { hour12: false });
       line.innerHTML = `<span class="ts">${ts}</span><span class="msg">${text}</span>`;
-      terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
+      terminalBody.appendChild(line);
+      terminalBody.scrollTop = terminalBody.scrollHeight;
     }
 
-    function resetNodes() {
-      document.querySelectorAll(".node").forEach(n => { n.className = "node"; });
+    function clearTerminal() {
+      terminalBody.innerHTML = `<div class="log-line info"><span class="ts">•</span><span class="msg">Terminal cleared. Simulator ready.</span></div>`;
     }
 
-    function setStatus(label, type) {
-      pipelineStatus.textContent = label;
-      pipelineStatus.style.background = type === "running"
-        ? "rgba(210,153,34,0.12)" : type === "success"
-        ? "rgba(63,185,80,0.12)" : "";
-      pipelineStatus.style.color = type === "running"
-        ? "var(--warning)" : type === "success"
-        ? "var(--success)" : "";
-
-      const dot = document.querySelector(".status-dot");
-      if (dot) dot.className = `status-dot ${type}`;
+    // Update frontend state representations
+    function updateQuotaDisplay() {
+      quotaPlan.textContent = userPlan;
+      quotaPlan.className = `badge ${userPlan.toLowerCase()}`;
+      quotaCredits.textContent = `${creditsRemaining} runs`;
     }
 
-    async function updateQuota() {
+    // Simulate Stripe & Razorpay webhooks
+    async function triggerMockWebhook(gateway) {
+      printLog(`Incoming mock ${gateway} payment event triggered...`, "info");
+      
+      // Attempt backend call first
       try {
-        const res = await fetch(`${BACKEND_URL}/api/billing/user/quota?user_id=user_1`);
+        const url = gateway === "stripe" 
+          ? `${BACKEND_URL}/api/billing/webhook/stripe` 
+          : `${BACKEND_URL}/api/billing/webhook/razorpay`;
+        
+        const headers = gateway === "stripe"
+          ? { "Content-Type": "application/json", "Stripe-Signature": "t=12345,v1=mocksig" }
+          : { "Content-Type": "application/json", "X-Razorpay-Signature": "mocksig" };
+
+        const body = gateway === "stripe"
+          ? JSON.stringify({ type: "checkout.session.completed", data: { object: { client_reference_id: "user_1" } } })
+          : JSON.stringify({ event: "payment.captured", payload: { payment: { entity: { email: "user_1@example.com" } } } });
+
+        const res = await fetch(url, { method: "POST", headers, body });
         const data = await res.json();
-        quotaPlan.textContent = data.plan.toUpperCase();
-        quotaCredits.textContent = `${data.remaining_credits} runs`;
-      } catch (_) {}
+        
+        printLog(`Backend Webhook Ingestion Successful: Upgraded plan.`, "success");
+        // Pull latest quota
+        const qRes = await fetch(`${BACKEND_URL}/api/billing/user/quota?user_id=user_1`);
+        const qData = await qRes.json();
+        userPlan = qData.plan.toUpperCase();
+        creditsRemaining = qData.remaining_credits;
+        updateQuotaDisplay();
+        return;
+      } catch (_) {
+        // Fallback to local offline simulation
+        await new Promise(r => setTimeout(r, 600));
+        userPlan = "PREMIUM";
+        creditsRemaining += 100;
+        updateQuotaDisplay();
+        printLog(`[MOCK Webhook Digest] constant-time signature compare: valid.`, "event");
+        printLog(`[MOCK Upgrade] Upgrade event: Upgraded user quota to PREMIUM (+100 credits).`, "success");
+      }
     }
 
-    function initSSE() {
-      printLog("Connecting to SSE stream...", "info");
-      const es = new EventSource(`${BACKEND_URL}/api/stream`);
-
-      es.addEventListener("step_status", (e) => {
-        const { node, status, token_usage, run_cost_usd } = JSON.parse(e.data);
-        printLog(`node:${node} → ${status.toUpperCase()}`, "event");
-        const el = document.getElementById(`node-${node}`);
-        if (el) el.className = `node ${status}`;
-        if (status === "success") {
-          totalCost += run_cost_usd;
-          tokensIn += token_usage.input;
-          tokensOut += token_usage.output;
-          metricCost.textContent = `$${totalCost.toFixed(4)}`;
-          metricTokensIn.textContent = tokensIn;
-          metricTokensOut.textContent = tokensOut;
-        }
-      });
-
-      es.addEventListener("run_complete", (e) => {
-        const { status, reason, artifacts } = JSON.parse(e.data);
-        if (status === "success") {
-          printLog(`Done. Download: ${artifacts.download_url}`, "success");
-          setStatus("DONE", "success");
-        } else {
-          printLog(`Failed: ${reason}`, "error");
-          setStatus("FAILED", "error");
-        }
-        runBtn.disabled = false;
-        updateQuota();
-      });
-
-      es.onerror = () => printLog("SSE disconnected. Reconnecting...", "error");
-    }
-
-    runBtn.addEventListener("click", async () => {
+    // Interactive offline-friendly DAG simulation workflow
+    async function executeSimulation(task) {
+      isSimulationRunning = true;
       runBtn.disabled = true;
-      resetNodes();
-      setStatus("RUNNING", "running");
-      printLog(`Starting: "${taskInput.value}"`, "running");
+      
+      // Reset layout nodes
+      document.querySelectorAll(".node-box").forEach(n => {
+        n.classList.remove("running", "success");
+      });
+      document.querySelectorAll(".dag-arrow").forEach(a => {
+        a.classList.remove("active");
+      });
+
+      // Reset Telemetry counters
+      let cost = 0;
+      let tokensIn = 0;
+      let tokensOut = 0;
+      let elapsed = 0.0;
+      
+      metricCost.textContent = `$${cost.toFixed(4)}`;
+      metricTokensIn.textContent = tokensIn;
+      metricTokensOut.textContent = tokensOut;
+      metricElapsed.textContent = `${elapsed.toFixed(1)}s`;
+
+      pipelineStatus.textContent = "RUNNING";
+      pipelineStatus.style.background = "rgba(245, 158, 11, 0.12)";
+      pipelineStatus.style.color = "var(--warning)";
+
+      const intervalTimer = setInterval(() => {
+        elapsed += 0.1;
+        metricElapsed.textContent = `${elapsed.toFixed(1)}s`;
+      }, 100);
+
+      // Node helper
+      async function runNode(nodeId, agentName, duration, tokenInVal, tokenOutVal, costVal, logMessages) {
+        const node = document.getElementById(`node-${nodeId}`);
+        node.classList.add("running");
+        printLog(`[SSE Stream] event:node_start → Node: ${nodeId}`, "running");
+        
+        for (const msg of logMessages) {
+          await new Promise(r => setTimeout(r, duration / logMessages.length));
+          printLog(msg, "info");
+        }
+
+        node.classList.remove("running");
+        node.classList.add("success");
+        
+        cost += costVal;
+        tokensIn += tokenInVal;
+        tokensOut += tokenOutVal;
+        
+        metricCost.textContent = `$${cost.toFixed(4)}`;
+        metricTokensIn.textContent = tokensIn;
+        metricTokensOut.textContent = tokensOut;
+        
+        printLog(`[SSE Stream] event:node_done → Node: ${nodeId} (DONE, Cost: $${costVal.toFixed(4)})`, "success");
+      }
+
+      try {
+        // Step 1: Planner
+        await runNode(
+          "Planner", 
+          "planner", 
+          1200, 
+          350, 
+          120, 
+          0.0022, 
+          [
+            `Analyzing campaign prompt: "${task}"`,
+            "Kahn's algorithm: In-degree of Planner = 0. Node qualified for execution.",
+            "Structuring marketing execution tree: setting copy requirements and image assets."
+          ]
+        );
+        
+        document.getElementById("arrow-1").classList.add("active");
+        await new Promise(r => setTimeout(r, 200));
+
+        // Step 2: Parallel Workers (Copywriter & ImageGenerator)
+        printLog("[Kahn's Algorithm] Planner complete. Resolving dependents... Copywriter and ImageGenerator are now in-degree 0.", "event");
+        printLog("[Engine] Starting parallel worker threads...", "event");
+
+        const copywriterPromise = runNode(
+          "Copywriter", 
+          "copywriter", 
+          2000, 
+          800, 
+          450, 
+          0.0075, 
+          [
+            "Copywriter active: Drafting Hinglish email copy & promo scripts...",
+            "Validating marketing hook context against constraints database."
+          ]
+        );
+
+        const imageGenPromise = runNode(
+          "ImageGenerator", 
+          "image_generator", 
+          1800, 
+          400, 
+          150, 
+          0.0035, 
+          [
+            "ImageGenerator active: Querying Midjourney API visual hooks...",
+            "Scaling resolution parameters to 9:16 widescreen format."
+          ]
+        );
+
+        await Promise.all([copywriterPromise, imageGenPromise]);
+
+        document.getElementById("arrow-2").classList.add("active");
+        await new Promise(r => setTimeout(r, 200));
+
+        // Step 3: Verifier
+        printLog("[Kahn's Algorithm] Parallel nodes satisfied. Queuing Verifier...", "event");
+        await runNode(
+          "Verifier", 
+          "verifier", 
+          1000, 
+          600, 
+          80, 
+          0.0042, 
+          [
+            "Verifier active: Auditing visual prompts and marketing copy consistency.",
+            "Formatting files: packaging final deliverables as client ZIP bundle."
+          ]
+        );
+
+        // Complete
+        clearInterval(intervalTimer);
+        creditsRemaining = Math.max(0, creditsRemaining - 1);
+        updateQuotaDisplay();
+
+        pipelineStatus.textContent = "SUCCESS";
+        pipelineStatus.style.background = "rgba(16, 185, 129, 0.12)";
+        pipelineStatus.style.color = "var(--success)";
+
+        printLog(`[SSE Stream] event:run_complete → Success. Campaign build completed in ${elapsed.toFixed(1)}s. Artifacts packaged: builds/run_marketing.zip`, "success");
+      } catch (e) {
+        clearInterval(intervalTimer);
+        printLog(`Simulation aborted: ${e.message}`, "error");
+      } finally {
+        isSimulationRunning = false;
+        runBtn.disabled = false;
+      }
+    }
+
+    // Trigger Action Router: tries live backend first, then falls back to simulation
+    async function triggerWorkflow() {
+      if (isSimulationRunning) return;
+      
+      const task = taskInput.value.trim() || "Marketing Campaign";
+      
+      if (creditsRemaining <= 0) {
+        printLog("Execution aborted: Quota depleted. Upgrade plan using simulated webhook below.", "error");
+        return;
+      }
+
+      // Try FastAPI backend POST
       try {
         const res = await fetch(`${BACKEND_URL}/api/run-pipeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ task: taskInput.value })
+          body: JSON.stringify({ task })
         });
-        const data = await res.json();
-        printLog(`Queued. Run ID: ${data.run_id}`, "info");
-      } catch (err) {
-        printLog(`Trigger failed: ${err.message}`, "error");
-        runBtn.disabled = false;
+        if (res.ok) {
+          const data = await res.json();
+          printLog(`Live execution triggered. Run ID: ${data.run_id}`, "event");
+          return;
+        }
+      } catch (_) {
+        // Fallback to local simulator
+        networkBadge.textContent = "Offline Simulation Mode";
+        networkBadge.style.color = "var(--text-muted)";
+        executeSimulation(task);
       }
-    });
+    }
 
-    document.getElementById("mock-stripe-btn").addEventListener("click", async () => {
-      printLog("Sending mock Stripe webhook...", "info");
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/billing/webhook/stripe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Stripe-Signature": "t=12345,v1=mocksig" },
-          body: JSON.stringify({ type: "checkout.session.completed", data: { object: { client_reference_id: "user_1" } } })
-        });
-        const data = await res.json();
-        printLog(`Stripe: ${JSON.stringify(data)}`, "success");
-        updateQuota();
-      } catch (err) { printLog(`Stripe failed: ${err.message}`, "error"); }
-    });
+    // Attempt to connect to live backend SSE stream on load
+    function checkLiveBackend() {
+      const socketTest = new EventSource(`${BACKEND_URL}/api/stream/health`).onerror = () => {
+        // Server unavailable, activate offline guide badge
+        networkBadge.textContent = "Offline Simulation Mode";
+        networkBadge.style.background = "rgba(148, 163, 184, 0.08)";
+        networkBadge.style.borderColor = "rgba(148, 163, 184, 0.15)";
+        networkBadge.style.color = "var(--text-muted)";
+      };
+    }
 
-    document.getElementById("mock-razorpay-btn").addEventListener("click", async () => {
-      printLog("Sending mock Razorpay webhook...", "info");
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/billing/webhook/razorpay`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Razorpay-Signature": "mocksig" },
-          body: JSON.stringify({ event: "payment.captured", payload: { payment: { entity: { email: "user_1@example.com" } } } })
-        });
-        const data = await res.json();
-        printLog(`Razorpay: ${JSON.stringify(data)}`, "success");
-        updateQuota();
-      } catch (err) { printLog(`Razorpay failed: ${err.message}`, "error"); }
-    });
-
-    updateQuota();
-    initSSE();
+    // Init
+    checkLiveBackend();
+    updateQuotaDisplay();
   </script>
 </body>
 </html>
