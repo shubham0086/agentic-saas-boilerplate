@@ -2,7 +2,7 @@
 
 > **IMPORTANT**: This repository contains real, production-ready, battle-tested code extracted directly from active commercial systems (like Agency OS or Founder Growth OS), rather than simplified mock learning artifacts.
 >
-> For project walkthroughs, architecture flowcharts, and system context, visit the live landing page: [shubham0086.github.io/MyPortfolio.github.io/projects/agent-saas.html](https://shubham0086.github.io/MyPortfolio.github.io/projects/agent-saas.html)
+> For project walkthroughs, architecture flowcharts, and system context, visit the live landing page: [my-portfolio-github-io-beta-five.vercel.app/projects/agent-saas.html](https://my-portfolio-github-io-beta-five.vercel.app/projects/agent-saas.html)
 
 > **Launch multi-agent-powered SaaS products today, not prototypes.**
 
